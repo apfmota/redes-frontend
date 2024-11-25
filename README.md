@@ -2,7 +2,5 @@
 
 ## To-do:
 - Criar um componente para a exibição de cada tipo de pacote
-- Alterar backend para enviar apenas JSON's
-- Implementar as funções de integração com o bakend em "APIFunctions.js"
+- Alterar backend para enviar apenas JSON's (fazer isso para cada protocolo)
 - Pensar em como vai ser feito o envio dos arquivos padrões (ou se serão extintos)
-- Ver como fazer para passar o arquivo selecionado para a função "sendFile" em "Main.js"
