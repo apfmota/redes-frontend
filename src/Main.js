@@ -1,16 +1,22 @@
 import './Main.css';
 import DataVisualization from './DataVisualization'
-import {getJsonResponse} from "./APIFunctions";
+import getJsonResponse from "./APIFunctions";
 import {useState} from "react";
 
 
 function Main() {
     const [currentProtocolVisualization, setCurrentProtocolVisualization] = useState(null)
-    const [selectedProtocol, setSelectedProtocol] = useState(null)
+    const [selectedProtocol, setSelectedProtocol] = useState("IP")
     const [jsonResponse, setJsonResponse] = useState(null)
+    const [file, setFile] = useState()
+
+    function selectFile(event) {
+        setFile(event.target.files[0])
+    }
 
     const sendFile = async (selectedProtocol, file) => {
-        //setJsonResponse(await getJsonResponse(file, selectedProtocol))
+        console.log(selectedProtocol);
+        setJsonResponse(await getJsonResponse(file, selectedProtocol))
         setCurrentProtocolVisualization(selectedProtocol)
     }
 
@@ -74,7 +80,7 @@ function Main() {
                 <form className="file--container">
                     <div className="input--file--container">
                         <label className="input--file--label" htmlFor="input--file">Selecione seu arquivo</label>
-                        <input id="input--file" type='file'/>
+                        <input id="input--file" onChange={selectFile} type='file'/>
                         <i className="icon--close fa fa-times fa-lg hidden" aria-hidden="true" onClick="removeFile(event)"></i>
                     </div>
                     <div className="protocol--container">
@@ -90,7 +96,8 @@ function Main() {
                             <option>SNMP</option>
                         </select>
                     </div>
-                    <button type="button"  className="send--file--button" onClick={() => sendFile(selectedProtocol, null)}>Enviar</button>
+                    {/* ta passando "null" ali no sendFile, precisa trocar pelo arquivo contido no input */}
+                    <button type="button"  className="send--file--button" onClick={() => sendFile(selectedProtocol, file)}>Enviar</button>
                     <div className="icon--load--container">
                         <i className="icon--load hidden fa-solid fa-circle-notch fa-xl"></i>
                     </div>
