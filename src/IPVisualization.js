@@ -1,9 +1,7 @@
 import { Graph } from "react-d3-graph";
+import { MapContainer, TileLayer, useMap, Popup, Marker } from 'react-leaflet'
 
 function IPVisualization({ jsonResponse }) {
-
-    console.log("carreguei o grafico")
-
     const { graph, ipsInfo }  = jsonResponse;
 
     const nodesSet = new Set();
@@ -64,14 +62,29 @@ function IPVisualization({ jsonResponse }) {
 
     return (
         <div style={{border: '1px solid black'}}>
-            <Graph
-                id="graph-id" // id is mandatory
-                data={data}
-                config={myConfig}
-                onClickNode={onClickNode}
-                onClickLink={onClickLink}
-                onEngineStop={onEngineStop}
-            />
+            <div>
+                <Graph
+                    id="graph-id" // id is mandatory
+                    data={data}
+                    config={myConfig}
+                    onClickNode={onClickNode}
+                    onClickLink={onClickLink}
+                    onEngineStop={onEngineStop}
+                />
+            </div>
+            <div>
+                <MapContainer style={{width: '400px', height: '400px'}} center={[0, 0]} zoom={2} scrollWheelZoom={false}>
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    {Object.keys(ipsInfo).map(ip => (
+                        <Marker position={[ipsInfo[ip].lat, ipsInfo[ip].lng]}>
+                            <Popup>{ip}</Popup>
+                        </Marker>
+                    ))}
+                </MapContainer>
+            </div>
         </div>
     )
 

@@ -1,7 +1,7 @@
 import './Main.css';
 import DataVisualization from './DataVisualization'
 import getJsonResponse from "./APIFunctions";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 
 function Main() {
@@ -9,6 +9,16 @@ function Main() {
     const [selectedProtocol, setSelectedProtocol] = useState("IP")
     const [jsonResponse, setJsonResponse] = useState(null)
     const [file, setFile] = useState()
+    const [pendingReloads, setPendingReloads] = useState(0)
+
+    useEffect(() => {
+        if (pendingReloads > 0) {
+            // gambiarra
+            setTimeout(() => {
+                setPendingReloads(pendingReloads - 1);
+            }, 800);
+        }
+    })
 
     function selectFile(event) {
         setFile(event.target.files[0])
@@ -18,6 +28,11 @@ function Main() {
         console.log(selectedProtocol);
         setJsonResponse(await getJsonResponse(file, selectedProtocol))
         setCurrentProtocolVisualization(selectedProtocol)
+
+        // gambiarra pra fazer a página recarregar até o grafo ficar bom
+        if (selectedProtocol === "IP") {
+            setPendingReloads(5);
+        }
     }
 
     return (
